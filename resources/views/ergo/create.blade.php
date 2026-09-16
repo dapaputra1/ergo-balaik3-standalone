@@ -6,13 +6,13 @@
     <title>Input Pengujian Ergonomi — Balai K3 Surabaya</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Plus Jakarta Sans (sesuai web internal) -->
+    <!-- Font Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- MediaPipe Pose untuk AI Sudut Otomatis -->
+    <!-- MediaPipe Pose untuk AI Deteksi Sudut -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 
@@ -23,11 +23,14 @@
             color: #ffffff;
             border-color: #153e67;
         }
-        /* Kotak Isian Nordic Body Map Persis Formulir Kertas */
+        /* Panel Gotrak Nordic Body Map */
         .gotrak-panel {
             border: 2px solid #000000;
             background-color: #ffffff;
             padding: 8px 10px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
         }
         .gotrak-title-bar {
             border-bottom: 2px solid #000000;
@@ -39,16 +42,16 @@
             justify-content: space-between;
             align-items: center;
             font-size: 11px;
-            color: #000;
+            color: #000000;
         }
         .gotrak-check-label {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             cursor: pointer;
             margin-bottom: 3px;
             font-size: 10px;
-            color: #000;
+            color: #000000;
         }
         .gotrak-check-label input[type="radio"], 
         .gotrak-check-label input[type="checkbox"] {
@@ -62,7 +65,7 @@
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
 
-    <!-- HEADER HALAMAN -->
+    <!-- ================= HEADER HALAMAN ================= -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
         <div>
             <div class="flex items-center gap-2 mb-1.5">
@@ -72,7 +75,7 @@
                 <span class="text-xs text-slate-400 font-medium">Revisi: -/1</span>
             </div>
             <h1 class="text-xl font-bold text-slate-900">Input Data Pengujian Faktor Ergonomi</h1>
-            <p class="text-xs text-slate-500">Evaluasi menyeluruh 31 butir checklist SNI 9011:2021 dan formulir keluhan Gotrak[cite: 1].</p>
+            <p class="text-xs text-slate-500">Lembar pengamatan lapangan berbasis SNI 9011:2021 dan formulir keluhan Gotrak.</p>
         </div>
 
         <div class="flex items-center gap-2.5">
@@ -100,11 +103,11 @@
             <div class="p-6 space-y-4 text-xs">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">1. Nama Perusahaan <span class="text-rose-500">*</span></label>
-                    <input type="text" name="company_name" required placeholder="Contoh: Perumda Air Minum Surya Sembada Kota Surabaya[cite: 1]" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                    <input type="text" name="company_name" required placeholder="Contoh: Perumda Air Minum Surya Sembada Kota Surabaya" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">2. Alamat Perusahaan</label>
-                    <input type="text" name="address" placeholder="Contoh: Jl. Mayjend Prof. Dr. Moestopo No. 2 Surabaya[cite: 1]" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                    <input type="text" name="address" placeholder="Contoh: Jl. Mayjend Prof. Dr. Moestopo No. 2 Surabaya" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">3. Jenis Perusahaan</label>
@@ -134,11 +137,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-semibold text-slate-700 block mb-1.5">6. Nama Tenaga Kerja <span class="text-rose-500">*</span></label>
-                        <input type="text" name="worker_name" required placeholder="Contoh: M. Jazuli[cite: 1]" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                        <input type="text" name="worker_name" required placeholder="Contoh: M. Jazuli" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                     </div>
                     <div>
                         <label class="font-semibold text-slate-700 block mb-1.5">7. Posisi / Jabatan <span class="text-rose-500">*</span></label>
-                        <input type="text" name="position" required placeholder="Contoh: Analis Fisika Kimia[cite: 1]" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                        <input type="text" name="position" required placeholder="Contoh: Analis Fisika Kimia" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                     </div>
                 </div>
 
@@ -147,11 +150,11 @@
                     <div class="space-y-2">
                         <div>
                             <span class="text-slate-600 block mb-1">a. Deskripsi Tugas:</span>
-                            <textarea name="job_tasks" rows="2" placeholder="Uraikan tugas operasional..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs bg-white outline-none focus:border-[#153e67]"></textarea>
+                            <textarea name="job_tasks" rows="2" placeholder="Uraikan tugas operasional yang dilaksanakan..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs bg-white outline-none focus:border-[#153e67]"></textarea>
                         </div>
                         <div>
                             <span class="text-slate-600 block mb-1">b. Alokasi Waktu:</span>
-                            <input type="text" name="job_duration" placeholder="Contoh: 2-3 jam/hari[cite: 1]" class="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white outline-none focus:border-[#153e67]">
+                            <input type="text" name="job_duration" placeholder="Contoh: Dalam 1 hari kerja melakukan analisa dengan durasi 2-3 jam" class="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white outline-none focus:border-[#153e67]">
                         </div>
                     </div>
                 </div>
@@ -230,7 +233,7 @@
         </div>
 
         <!-- =========================================================================
-             BAGIAN 3: NORDIC BODY MAP (PERSIS 100% SEPERTI GAMBAR FORMULIR ASLI)
+             BAGIAN 3: NORDIC BODY MAP (SVG-FIRST DENGAN PANAH PRESISI & ELEGAN)
              ========================================================================= -->
         <div id="gotrak_section" class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden transition-all duration-300 opacity-40 pointer-events-none">
             <div class="px-6 py-4 border-b border-slate-200 bg-[#fbfcfd] flex items-center justify-between">
@@ -238,45 +241,57 @@
                     <span class="w-6 h-6 rounded bg-[#153e67] text-white flex items-center justify-center text-xs font-bold">3</span>
                     <h2 class="text-sm font-bold text-slate-900">14. Pemetaan Keluhan Bagian Tubuh (Nordic Body Map / Gotrak)</h2>
                 </div>
-                <span class="text-[11px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                <span class="text-[11px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded">
                     Gotrak Diagram
                 </span>
             </div>
 
             <div class="p-6 space-y-6">
                 <p class="text-slate-600 text-xs font-medium">
-                    Catatan: 'sakit' dapat berupa nyeri, kaku, mati rasa, kesemutan, atau rasa terbakar.
+                    Catatan: 'sakit' dapat berupa nyeri, kaku, mati rasa, kesemutan, atau rasa terbakar. Setiap kotak dihubungkan langsung dengan garis penunjuk ke bagian tubuh terkait:
                 </p>
 
-                <!-- KONTEN DIAGRAM DENGAN SILUET DI TENGAH DAN KOTAK CHECKLIST -->
+                <!-- KONTEN DIAGRAM 3 KOLOM: KOTAK KIRI (4) - SILUET PUSAT (3) - KOTAK KANAN (4) -->
                 <div class="border-2 border-black p-4 sm:p-6 bg-white overflow-x-auto">
-                    <div class="min-w-[880px] grid grid-cols-12 gap-5 items-center relative">
+                    <div id="gotrakArea" class="min-w-[1020px] grid grid-cols-11 gap-4 items-stretch relative">
                         
+                        <!-- Layer SVG Panah Penunjuk Dinamis -->
+                        <svg id="pointerSvg"
+                             class="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <!-- Marker Panah Ramping & Tajam (Warna Navy Balai K3 #153e67) -->
+                                <marker id="arrowHead" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+                                    <path d="M 1 1.5 L 8 4.5 L 1 7.5 L 2.8 4.5 Z" fill="#153e67" />
+                                </marker>
+                            </defs>
+                        </svg>
+
                         @php
                             $leftBoxes = [
-                                'leher' => ['title' => 'LEHER', 'has_side' => false],
-                                'siku' => ['title' => 'SIKU', 'has_side' => true],
-                                'lengan' => ['title' => 'LENGAN', 'has_side' => true],
-                                'tangan' => ['title' => 'TANGAN', 'has_side' => true],
-                                'paha' => ['title' => 'PAHA', 'has_side' => true],
-                                'betis' => ['title' => 'BETIS', 'has_side' => true],
+                                'leher' => ['title' => 'LEHER', 'has_side' => false, 'id' => 'box_leher'],
+                                'siku' => ['title' => 'SIKU', 'has_side' => true, 'id' => 'box_siku'],
+                                'lengan' => ['title' => 'LENGAN', 'has_side' => true, 'id' => 'box_lengan'],
+                                'tangan' => ['title' => 'TANGAN', 'has_side' => true, 'id' => 'box_tangan'],
+                                'paha' => ['title' => 'PAHA', 'has_side' => true, 'id' => 'box_paha'],
+                                'betis' => ['title' => 'BETIS', 'has_side' => true, 'id' => 'box_betis'],
                             ];
                             $rightBoxes = [
-                                'bahu' => ['title' => 'BAHU', 'has_side' => true],
-                                'punggung_atas' => ['title' => 'PUNGGUNG ATAS', 'has_side' => false],
-                                'punggung_bawah' => ['title' => 'PUNGGUNG BAWAH', 'has_side' => false],
-                                'pinggul' => ['title' => 'PINGGUL', 'has_side' => true],
-                                'lutut' => ['title' => 'LUTUT', 'has_side' => true],
-                                'kaki' => ['title' => 'KAKI', 'has_side' => true],
+                                'bahu' => ['title' => 'BAHU', 'has_side' => true, 'id' => 'box_bahu'],
+                                'punggung_atas' => ['title' => 'PUNGGUNG ATAS', 'has_side' => false, 'id' => 'box_punggung_atas'],
+                                'punggung_bawah' => ['title' => 'PUNGGUNG BAWAH', 'has_side' => false, 'id' => 'box_punggung_bawah'],
+                                'pinggul' => ['title' => 'PINGGUL', 'has_side' => true, 'id' => 'box_pinggul'],
+                                'lutut' => ['title' => 'LUTUT', 'has_side' => true, 'id' => 'box_lutut'],
+                                'kaki' => ['title' => 'KAKI', 'has_side' => true, 'id' => 'box_kaki'],
                             ];
                             $freqOptions = ['Tidak pernah', 'Terkadang', 'Sering', 'Selalu'];
                             $sevOptions = ['Tidak ada masalah', 'Tidak nyaman', 'Sakit', 'Sakit parah'];
                         @endphp
 
-                        <!-- KOLOM SISI KIRI (6 KOTAK) -->
-                        <div class="col-span-5 space-y-3.5">
+                        <!-- KOLOM SISI KIRI (4 KOLOM DARI 11) -->
+                        <div class="col-span-4 flex flex-col justify-between py-1 pr-2 space-y-4">
                             @foreach($leftBoxes as $key => $box)
-                                <div class="gotrak-panel">
+                                <div id="{{ $box['id'] }}" class="gotrak-panel">
                                     <div class="gotrak-title-bar">
                                         <span>{{ $box['title'] }}</span>
                                         @if($box['has_side'])
@@ -288,7 +303,7 @@
                                     </div>
                                     <div class="grid grid-cols-2 gap-2 text-[10px]">
                                         <div>
-                                            <span class="font-bold block mb-1 text-black">Seberapa sering?</span>
+                                            <span class="font-bold block mb-1 text-slate-900">Seberapa sering?</span>
                                             @foreach($freqOptions as $idx => $f)
                                                 <label class="gotrak-check-label">
                                                     <input type="radio" name="gotrak[{{ $key }}][freq]" value="{{ $f }}" {{ $idx === 0 ? 'checked' : '' }}> {{ $f }}
@@ -296,7 +311,7 @@
                                             @endforeach
                                         </div>
                                         <div>
-                                            <span class="font-bold block mb-1 text-black">Seberapa parah?</span>
+                                            <span class="font-bold block mb-1 text-slate-900">Seberapa parah?</span>
                                             @foreach($sevOptions as $idx => $s)
                                                 <label class="gotrak-check-label">
                                                     <input type="radio" name="gotrak[{{ $key }}][severity]" value="{{ $s }}" {{ $idx === 0 ? 'checked' : '' }}> {{ $s }}
@@ -308,19 +323,55 @@
                             @endforeach
                         </div>
 
-                        <!-- KOLOM TENGAH: GAMBAR SILUET TUBUH ASLI -->
-                        <div class="col-span-2 flex flex-col items-center justify-center relative py-2">
-                            <!-- Gambar Siluet Asli dari Formulir Balai K3 -->
-                            <img src="{{ asset('images/ergo-checklist/nordic_body_map_original.png') }}" 
-                                 alt="Siluet Gotrak Tubuh" 
-                                 class="w-full max-w-[155px] object-contain drop-shadow-sm select-none pointer-events-none"
-                                 onerror="this.src='https://placehold.co/150x450?text=Siluet+Tubuh+Gotrak'">
+                        <!-- KOLOM TENGAH (3 KOLOM): SILUET DENGAN ANCHOR TERKALIBRASI PRESISI -->
+                        <div id="bodyCenterCol" class="col-span-3 relative flex items-center justify-center select-none py-1">
+                            <svg id="silhouetteCanvas" viewBox="0 0 300 900" class="w-full h-auto max-h-[900px] drop-shadow-sm" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Siluet Tubuh Terkunci Rapat Tanpa Margin Kosong Vertikal -->
+                                <image href="{{ asset('images/ergo-checklist/nordic_body_clean.png') }}" x="0" y="0" width="300" height="900" preserveAspectRatio="none" />
+
+                                <!-- TITIK TARGET SENDI (Presisi piksel anatomi tubuh yang telah dikalibrasi) -->
+                                <!-- 1. Leher: Tengkuk leher tepat di batas garis kerah -->
+                                <circle id="anchor_box_leher" cx="150" cy="148" r="1" opacity="0" />
+                                
+                                <!-- 2. Siku Kiri: Tepi luar lekukan siku kiri -->
+                                <circle id="anchor_box_siku" cx="88" cy="320" r="1" opacity="0" />
+
+                                <!-- 3. Lengan Bawah Kiri: Sisi luar lengan bawah kiri -->
+                                <circle id="anchor_box_lengan" cx="80" cy="350" r="1" opacity="0" />
+
+                                <!-- 4. Tangan Kiri: Telapak / pergelangan tangan kiri luar -->
+                                <circle id="anchor_box_tangan" cx="65" cy="430" r="1" opacity="0" />
+
+                                <!-- 5. Paha Kiri: Bagian tengah paha belakang kiri -->
+                                <circle id="anchor_box_paha" cx="136" cy="520" r="1" opacity="0" />
+
+                                <!-- 6. Betis Kiri: Perut otot betis kiri -->
+                                <circle id="anchor_box_betis" cx="124" cy="670" r="1" opacity="0" />
+
+                                <!-- 7. Bahu Kanan: Puncak luar tulang bahu kanan -->
+                                <circle id="anchor_box_bahu" cx="200" cy="175" r="1" opacity="0" />
+
+                                <!-- 8. Punggung Atas: Punggung atas antara tulang belikat -->
+                                <circle id="anchor_box_punggung_atas" cx="150" cy="225" r="1" opacity="0" />
+
+                                <!-- 9. Punggung Bawah: Pinggang / lumbal tengah -->
+                                <circle id="anchor_box_punggung_bawah" cx="150" cy="330" r="1" opacity="0" />
+
+                                <!-- 10. Pinggul: Garis panggul / sabuk bokong -->
+                                <circle id="anchor_box_pinggul" cx="150" cy="395" r="1" opacity="0" />
+
+                                <!-- 11. Lutut Kanan: Lekuk belakang lutut kanan -->
+                                <circle id="anchor_box_lutut" cx="176" cy="595" r="1" opacity="0" />
+
+                                <!-- 12. Kaki Kanan: Tumit / mata kaki kanan -->
+                                <circle id="anchor_box_kaki" cx="165" cy="810" r="1" opacity="0" />
+                            </svg>
                         </div>
 
-                        <!-- KOLOM SISI KANAN (6 KOTAK) -->
-                        <div class="col-span-5 space-y-3.5">
+                        <!-- KOLOM SISI KANAN (4 KOLOM DARI 11) -->
+                        <div class="col-span-4 flex flex-col justify-between py-1 pl-2 space-y-4">
                             @foreach($rightBoxes as $key => $box)
-                                <div class="gotrak-panel">
+                                <div id="{{ $box['id'] }}" class="gotrak-panel">
                                     <div class="gotrak-title-bar">
                                         <span>{{ $box['title'] }}</span>
                                         @if($box['has_side'])
@@ -332,7 +383,7 @@
                                     </div>
                                     <div class="grid grid-cols-2 gap-2 text-[10px]">
                                         <div>
-                                            <span class="font-bold block mb-1 text-black">Seberapa sering?</span>
+                                            <span class="font-bold block mb-1 text-slate-900">Seberapa sering?</span>
                                             @foreach($freqOptions as $idx => $f)
                                                 <label class="gotrak-check-label">
                                                     <input type="radio" name="gotrak[{{ $key }}][freq]" value="{{ $f }}" {{ $idx === 0 ? 'checked' : '' }}> {{ $f }}
@@ -340,7 +391,7 @@
                                             @endforeach
                                         </div>
                                         <div>
-                                            <span class="font-bold block mb-1 text-black">Seberapa parah?</span>
+                                            <span class="font-bold block mb-1 text-slate-900">Seberapa parah?</span>
                                             @foreach($sevOptions as $idx => $s)
                                                 <label class="gotrak-check-label">
                                                     <input type="radio" name="gotrak[{{ $key }}][severity]" value="{{ $s }}" {{ $idx === 0 ? 'checked' : '' }}> {{ $s }}
@@ -355,8 +406,8 @@
                     </div>
                 </div>
 
-                <!-- TABEL RIWAYAT CEDERA (PERSIS BAGIAN BAWAH FORMULIR) -->
-                <div class="space-y-2 pt-3">
+                <!-- TABEL RIWAYAT CEDERA -->
+                <div class="space-y-2 pt-3 border-t border-slate-200">
                     <p class="text-xs text-black font-semibold">
                         Pada setiap bagian tubuh dengan keterangan "sakit" atau "sakit parah", atau "selalu" merasakan "tidak nyaman", jelaskan pekerjaan yang menurut Anda menyebabkan masalah tersebut, dan apakah sebelumnya Anda pernah mengalami cedera di bagian tubuh tersebut:
                     </p>
@@ -365,7 +416,7 @@
                             <thead class="bg-slate-100 font-bold border-b-2 border-black text-[11px] text-black">
                                 <tr>
                                     <th class="py-2 px-3 border-r-2 border-black w-1/4">Bagian Tubuh</th>
-                                    <th class="py-2 px-3 border-r-2 border-black w-1/4 text-center">Pernah Mengalami Cedera Sebelumnya?</th>
+                                    <th class="py-2 px-3 border-r-2 border-black w-1/4 text-center">Pernah Mengalami Cedera?</th>
                                     <th class="py-2 px-3">Kemungkinan Pekerjaan yang Menyebabkan Masalah</th>
                                 </tr>
                             </thead>
@@ -373,7 +424,7 @@
                                 @for($i = 0; $i < 4; $i++)
                                     <tr>
                                         <td class="p-2 border-r-2 border-black">
-                                            <input type="text" name="injury[{{ $i }}][part]" placeholder="Contoh: Punggung Bawah[cite: 1]" class="w-full border border-slate-300 rounded p-1 text-xs outline-none focus:border-[#153e67]">
+                                            <input type="text" name="injury[{{ $i }}][part]" placeholder="Contoh: Punggung Bawah" class="w-full border border-slate-300 rounded p-1 text-xs outline-none focus:border-[#153e67]">
                                         </td>
                                         <td class="p-2 border-r-2 border-black text-center">
                                             <div class="flex justify-center gap-4 text-xs">
@@ -390,6 +441,7 @@
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -402,23 +454,23 @@
                     <span class="w-6 h-6 rounded bg-[#153e67] text-white flex items-center justify-center text-xs font-bold">4</span>
                     <h2 class="text-sm font-bold text-slate-900">Daftar Periksa Potensi Bahaya Faktor Ergonomi (Lengkap 31 Butir)</h2>
                 </div>
-                <span class="text-[11px] font-semibold text-slate-500">SNI 9011:2021[cite: 1]</span>
+                <span class="text-[11px] font-semibold text-slate-500">SNI 9011:2021</span>
             </div>
 
             <div class="p-6 space-y-6 text-xs">
                 @php
                     $ergoItemsA = [
-                        1 => ['img' => 'image21.png', 'title' => 'Leher: Memuntir atau Menekuk', 'desc' => 'Leher memuntir > 20°, atau menekuk ke depan > 20° / ke belakang > 5°[cite: 1].'],
-                        2 => ['img' => 'image17.png', 'title' => 'Bahu: Lengan / Siku Tidak Ditopang', 'desc' => 'Lengan/siku tidak ditopang, dengan posisi di atas tinggi perut[cite: 1].'],
-                        3 => ['img' => 'image20.png', 'title' => 'Rotasi Lengan Bawah Secara Cepat', 'desc' => 'Gerakan pronasi atau supinasi berulang dengan cepat[cite: 1].'],
-                        4 => ['img' => 'image19.png', 'title' => 'Pergelangan Tangan Menekuk', 'desc' => 'Pergelangan menekuk ke depan (fleksi) atau ke samping[cite: 1].'],
+                        1 => ['img' => 'image21.png', 'title' => 'Leher: Memuntir atau Menekuk', 'desc' => 'Leher memuntir > 20°, atau menekuk ke depan > 20° / ke belakang > 5°.'],
+                        2 => ['img' => 'image17.png', 'title' => 'Bahu: Lengan / Siku Tidak Ditopang', 'desc' => 'Lengan/siku tidak ditopang, dengan posisi di atas tinggi perut.'],
+                        3 => ['img' => 'image20.png', 'title' => 'Rotasi Lengan Bawah Secara Cepat', 'desc' => 'Gerakan pronasi atau supinasi berulang dengan cepat.'],
+                        4 => ['img' => 'image19.png', 'title' => 'Pergelangan Tangan Menekuk', 'desc' => 'Pergelangan menekuk ke depan (fleksi) atau ke samping.'],
                         5 => ['img' => 'placeholder',  'title' => 'Gerakan Lengan Sedang', 'desc' => 'Gerakan lengan yang stabil dan ritmis dengan jeda yang teratur.'],
                         6 => ['img' => 'placeholder',  'title' => 'Gerakan Lengan Intensif', 'desc' => 'Gerakan lengan cepat yang berlangsung terus-menerus tanpa jeda.'],
-                        7 => ['img' => 'image16.png', 'title' => 'Penggunaan Keyboard (Berselang)', 'desc' => 'Mengetik di komputer secara berselang (diselingi jeda)[cite: 1].'],
+                        7 => ['img' => 'image16.png', 'title' => 'Penggunaan Keyboard (Berselang)', 'desc' => 'Mengetik di komputer secara berselang (diselingi jeda).'],
                         8 => ['img' => 'placeholder',  'title' => 'Mengetik Secara Intensif', 'desc' => 'Mengetik secara konstan dalam waktu lama.'],
-                        9 => ['img' => 'image5.png',  'title' => 'Menggenggam Kuat (Power Grip)', 'desc' => 'Menggenggam benda dengan gaya lebih dari 5 kg[cite: 1].'],
+                        9 => ['img' => 'image5.png',  'title' => 'Menggenggam Kuat (Power Grip)', 'desc' => 'Menggenggam benda dengan gaya lebih dari 5 kg.'],
                         10 => ['img' => 'placeholder', 'title' => 'Menjepit dengan Jari (Pinch Grip)', 'desc' => 'Memencet objek dengan ujung jari dengan gaya lebih dari 1 kg.'],
-                        11 => ['img' => 'image4.png',  'title' => 'Tekanan Kontak Benda Keras', 'desc' => 'Kulit tertekan oleh benda yang keras atau runcing[cite: 1].'],
+                        11 => ['img' => 'image4.png',  'title' => 'Tekanan Kontak Benda Keras', 'desc' => 'Kulit tertekan oleh benda yang keras atau runcing.'],
                         12 => ['img' => 'placeholder', 'title' => 'Menggunakan Tangan Memukul', 'desc' => 'Menggunakan tangan untuk memukul (berfungsi seperti palu).'],
                         13 => ['img' => 'image3.png',  'title' => 'Getaran Lokal (Hand-Arm)', 'desc' => 'Paparan getaran lokal pada tangan dan lengan.'],
                         14 => ['img' => 'placeholder', 'title' => 'Ritme Kerja Tidak Terkontrol', 'desc' => 'Ritme kerja dipacu oleh mesin (conveyor).'],
@@ -427,16 +479,16 @@
                     ];
                     
                     $ergoItemsB = [
-                        17 => ['img' => 'image25.png', 'title' => 'Tubuh Membungkuk Sedang', 'desc' => 'Tubuh membungkuk antara 20° hingga 45°[cite: 1].'],
-                        18 => ['img' => 'image26.png', 'title' => 'Tubuh Membungkuk Berat', 'desc' => 'Tubuh membungkuk ke depan lebih dari 45°[cite: 1].'],
+                        17 => ['img' => 'image25.png', 'title' => 'Tubuh Membungkuk Sedang', 'desc' => 'Tubuh membungkuk antara 20° hingga 45°.'],
+                        18 => ['img' => 'image26.png', 'title' => 'Tubuh Membungkuk Berat', 'desc' => 'Tubuh membungkuk ke depan lebih dari 45°.'],
                         19 => ['img' => 'image24.png', 'title' => 'Tubuh Menekuk ke Belakang', 'desc' => 'Tubuh menekuk ke belakang (ekstensi) hingga 30°.'],
                         20 => ['img' => 'image15.png', 'title' => 'Pemuntiran Torso', 'desc' => 'Batang tubuh berputar saat memindahkan barang.'],
                         21 => ['img' => 'image1.png',  'title' => 'Gerakan Abduksi Paha', 'desc' => 'Gerakan paha menjauhi tubuh ke samping.'],
                         22 => ['img' => 'image14.png', 'title' => 'Posisi Berlutut atau Jongkok', 'desc' => 'Bekerja dalam posisi berlutut/jongkok terus menerus.'],
                         23 => ['img' => 'image13.png', 'title' => 'Pergelangan Kaki Menekuk', 'desc' => 'Pergelangan kaki menekuk ke atas/bawah berulang.'],
                         24 => ['img' => 'image11.png', 'title' => 'Aktivitas Pedal / Pijakan Labil', 'desc' => 'Menginjak pedal kaki atau pijakan kaki tidak stabil.'],
-                        25 => ['img' => 'image6.png',  'title' => 'Duduk Lama Tanpa Sandaran', 'desc' => 'Duduk lama tanpa penopang punggung memadai[cite: 1].'],
-                        26 => ['img' => 'image9.png',  'title' => 'Berdiri Diam Dalam Jangka Lama', 'desc' => 'Berdiri statis lama tanpa tumpuan kaki[cite: 1].'],
+                        25 => ['img' => 'image6.png',  'title' => 'Duduk Lama Tanpa Sandaran', 'desc' => 'Duduk lama tanpa penopang punggung memadai.'],
+                        26 => ['img' => 'image9.png',  'title' => 'Berdiri Diam Dalam Jangka Lama', 'desc' => 'Berdiri statis lama tanpa tumpuan kaki.'],
                         27 => ['img' => 'image2.png',  'title' => 'Tubuh Bawah Tertekan', 'desc' => 'Paha/lutut tertekan permukaan benda keras.'],
                         28 => ['img' => 'image7.png',  'title' => 'Lutut Menendang/Memukul', 'desc' => 'Menggunakan lutut untuk menghentak.'],
                         29 => ['img' => 'image8.png',  'title' => 'Getaran Seluruh Tubuh', 'desc' => 'Paparan getaran mekanis pada seluruh tubuh (WBV).'],
@@ -575,7 +627,7 @@
 
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Metode Pengendalian yang Sudah Ada</label>
-                        <input type="text" name="existing_control" value="Adanya waktu istirahat/peregangan[cite: 1]" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none focus:border-[#153e67]">
+                        <input type="text" name="existing_control" value="Adanya waktu istirahat/peregangan" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none focus:border-[#153e67]">
                     </div>
 
                     <div class="pt-4 flex justify-end gap-2 border-t border-slate-200">
@@ -591,17 +643,102 @@
     </form>
 </div>
 
-<!-- JAVASCRIPT: TOGGLE GOTRAK & AI POSE -->
+<!-- =========================================================================
+     JAVASCRIPT: TOGGLE GOTRAK, DYNAMIC SVG CONNECTOR & MEDIAPIPE POSE
+     ========================================================================= -->
 <script>
+    // 1. Fungsi Toggle Tampil/Sembunyi Nordic Body Map
     function toggleGotrak(show) {
         const sec = document.getElementById('gotrak_section');
         if (show) {
             sec.classList.remove('opacity-40', 'pointer-events-none');
+            setTimeout(drawDynamicPointers, 200);
         } else {
             sec.classList.add('opacity-40', 'pointer-events-none');
         }
     }
 
+    // Daftar ID Kotak yang Dihubungkan ke Titik Sendi Target
+    const boxIds = [
+        'box_leher', 'box_siku', 'box_lengan', 'box_tangan', 'box_paha', 'box_betis',
+        'box_bahu', 'box_punggung_atas', 'box_punggung_bawah', 'box_pinggul', 'box_lutut', 'box_kaki'
+    ];
+
+    // 2. Logika Penarikan Garis Panah Dinamis Berpenampilan Ramping & Presisi
+    function drawDynamicPointers() {
+        const svg = document.getElementById('pointerSvg');
+        const container = document.getElementById('gotrakArea');
+
+        if (!svg || !container) return;
+
+        const contRect = container.getBoundingClientRect();
+        if (contRect.width <= 0 || contRect.height <= 0) {
+            requestAnimationFrame(drawDynamicPointers);
+            return;
+        }
+
+        // Sinkronkan viewBox SVG overlay secara 1:1 dengan kontainer diagram
+        svg.setAttribute('viewBox', `0 0 ${contRect.width} ${contRect.height}`);
+
+        let elements = `
+            <defs>
+                <!-- Marker Panah Ramping & Tajam (Warna Navy Balai K3 #153e67) -->
+                <marker id="arrowHead" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+                    <path d="M 1 1.5 L 8 4.5 L 1 7.5 L 2.8 4.5 Z" fill="#153e67" />
+                </marker>
+            </defs>
+        `;
+
+        boxIds.forEach(boxId => {
+            const boxEl = document.getElementById(boxId);
+            const anchorEl = document.getElementById('anchor_' + boxId);
+
+            if (!boxEl || !anchorEl) return;
+
+            const boxRect = boxEl.getBoundingClientRect();
+            const anchorRect = anchorEl.getBoundingClientRect();
+
+            // Cek apakah kartu berada di sisi kiri atau kanan siluet
+            const isLeft = boxRect.left < anchorRect.left;
+
+            // Titik awal garis: dari tepi kartu yang menghadap ke arah siluet
+            const startX = isLeft 
+                ? (boxRect.right - contRect.left) 
+                : (boxRect.left - contRect.left);
+            const startY = (boxRect.top + boxRect.height / 2) - contRect.top;
+
+            // Titik akhir garis: tepat di koordinat pusat jangkar sendi siluet
+            const endX = (anchorRect.left + anchorRect.width / 2) - contRect.left;
+            const endY = (anchorRect.top + anchorRect.height / 2) - contRect.top;
+
+            // Garis lurus yang bersih & halus
+            elements += `
+                <line x1="${startX}" y1="${startY}" x2="${endX}" y2="${endY}" 
+                      stroke="#153e67" stroke-width="1.6" stroke-linecap="round" marker-end="url(#arrowHead)" />
+                <circle cx="${startX}" cy="${startY}" r="3" fill="#153e67" stroke="#ffffff" stroke-width="1" />
+            `;
+        });
+
+        svg.innerHTML = elements;
+    }
+
+    // Inisialisasi saat window selesai dimuat
+    window.addEventListener('load', () => {
+        setTimeout(drawDynamicPointers, 200);
+    });
+
+    // Responsif terhadap perbesaran/pengecilan jendela & scroll horizontal tabel
+    window.addEventListener('resize', () => {
+        clearTimeout(window.__nbmResize);
+        window.__nbmResize = setTimeout(drawDynamicPointers, 80);
+    });
+
+    const scrollArea = document.querySelector('.overflow-x-auto');
+    if (scrollArea) {
+        scrollArea.addEventListener('scroll', drawDynamicPointers);
+    }
+
+    // 3. Inisialisasi MediaPipe Pose AI (Anotasi Sudut Kuning Otomatis)
     let rawImageElement = new Image();
     let detectedLandmarks = null;
 
