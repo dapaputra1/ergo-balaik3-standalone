@@ -1,13 +1,21 @@
 <?php
 
 use App\Http\Controllers\Ergo\ErgoAssessmentController;
+use Illuminate\Support\Facades\Route;
 
-Route::prefix('ergo')->name('ergo.')->group(function () {
-    Route::get('/', [ErgoAssessmentController::class, 'index'])->name('index');
-    Route::get('/create', [ErgoAssessmentController::class, 'create'])->name('create');
-    Route::post('/store', [ErgoAssessmentController::class, 'store'])->name('store');
-    Route::get('/result/{id}', [ErgoAssessmentController::class, 'show'])->name('result');
-    
-    // Route untuk Cetak PDF LHU Resmi
-    Route::get('/pdf/{id}', [ErgoAssessmentController::class, 'exportPdf'])->name('pdf');
+// 1. Redirect root URL (/) langsung ke halaman utama modul ergonomi
+Route::redirect('/', '/ergo');
+
+// 2. Grup rute modul Ergonomi Balai K3
+Route::prefix('ergo')->name('ergo.')->controller(ErgoAssessmentController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/result/{id}', 'show')->name('result');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::delete('/destroy/{id}', 'destroy')->name('destroy');
+
+    // Cetak PDF LHU Resmi
+    Route::get('/pdf/{id}', 'exportPdf')->name('pdf');
 });

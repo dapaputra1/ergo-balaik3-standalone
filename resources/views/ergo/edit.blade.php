@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Pengujian Ergonomi — Balai K3 Surabaya</title>
+    <title>Edit Pengujian Ergonomi — {{ $assessment->worker_name }} (Balai K3 Surabaya)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Plus Jakarta Sans -->
@@ -66,7 +66,7 @@
     @if(session('error'))
     <div class="p-4 rounded-xl bg-rose-50 border-2 border-rose-300 text-xs text-rose-800 font-semibold space-y-1">
         <div class="flex items-center gap-1.5 font-bold text-rose-900 text-sm">
-            <i class="ph-bold ph-warning-circle text-lg"></i> Gagal Menyimpan Data:
+            <i class="ph-bold ph-warning-circle text-lg"></i> Gagal Memperbarui Data:
         </div>
         <p>{{ session('error') }}</p>
     </div>
@@ -87,12 +87,12 @@
         <div>
             <div class="flex items-center gap-2 mb-1.5">
                 <span class="px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#e8f1f9] text-[#153e67] border border-[#d1e3f3]">
-                    Formulir F/7.3.10/BK3-SBY
+                    Edit Mode — F/7.3.10/BK3-SBY
                 </span>
                 <span class="text-xs text-slate-400 font-medium">Revisi: -/1</span>
             </div>
-            <h1 class="text-xl font-bold text-slate-900">Input Data Pengujian Faktor Ergonomi</h1>
-            <p class="text-xs text-slate-500">Lembar pengamatan lapangan berbasis SNI 9011:2021 dan formulir keluhan Gotrak.</p>
+            <h1 class="text-xl font-bold text-slate-900">Perbarui Data Pengujian Faktor Ergonomi</h1>
+            <p class="text-xs text-slate-500">Sesuaikan lembar pengamatan lapangan berbasis SNI 9011:2021 dan formulir Gotrak.</p>
         </div>
 
         <div class="flex items-center gap-2.5">
@@ -100,7 +100,7 @@
                 Batal
             </a>
             <button type="submit" form="ergoForm" id="btnTopSubmit" class="px-4 py-2 rounded-lg bg-[#153e67] hover:bg-[#0f2e4d] text-white text-xs font-semibold shadow-xs transition flex items-center gap-1.5">
-                <i class="ph-bold ph-floppy-disk"></i> Simpan Data Asesmen
+                <i class="ph-bold ph-check"></i> Simpan Perubahan Asesmen
             </button>
         </div>
     </div>
@@ -120,19 +120,19 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-center">
             <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
                 <span class="text-slate-500 block text-[11px] mb-1">Tubuh Bagian Atas</span>
-                <span id="scoreUpper" class="text-sm font-bold text-slate-800">0</span>
+                <span id="scoreUpper" class="text-sm font-bold text-slate-800">{{ $assessment->upper_body_score ?? 0 }}</span>
             </div>
             <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
                 <span class="text-slate-500 block text-[11px] mb-1">Punggung & Bawah</span>
-                <span id="scoreLower" class="text-sm font-bold text-slate-800">0</span>
+                <span id="scoreLower" class="text-sm font-bold text-slate-800">{{ $assessment->lower_body_score ?? 0 }}</span>
             </div>
             <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
                 <span class="text-slate-500 block text-[11px] mb-1">Beban Manual (MMH)</span>
-                <span id="scoreMMH" class="text-sm font-bold text-slate-800">0</span>
+                <span id="scoreMMH" class="text-sm font-bold text-slate-800">{{ $assessment->mmh_score ?? 0 }}</span>
             </div>
             <div class="p-2 bg-[#e8f1f9] rounded-lg border border-[#d1e3f3]">
                 <span class="text-[#153e67] block text-[11px] font-semibold mb-1">Total Skor Bahaya</span>
-                <span id="scoreTotal" class="text-base font-black text-[#153e67]">0</span>
+                <span id="scoreTotal" class="text-base font-black text-[#153e67]">{{ $assessment->total_score ?? 0 }}</span>
             </div>
         </div>
 
@@ -144,10 +144,12 @@
         </div>
     </div>
 
-    <form id="ergoForm" action="{{ route('ergo.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <!-- FORM EDIT UTAMA -->
+    <form id="ergoForm" action="{{ route('ergo.update', $assessment->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
+        @method('PUT')
 
-        <!-- ================= BAGIAN 1: DATA UMUM PERUSAHAAN ================= -->
+        <!-- BAGIAN 1: DATA UMUM PERUSAHAAN -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 bg-[#fbfcfd] flex items-center gap-2.5">
                 <span class="w-6 h-6 rounded bg-[#153e67] text-white flex items-center justify-center text-xs font-bold">1</span>
@@ -157,24 +159,24 @@
             <div class="p-6 space-y-4 text-xs">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">1. Nama Perusahaan <span class="text-rose-500">*</span></label>
-                    <input type="text" name="company_name" required placeholder="Contoh: Perumda Air Minum Surya Sembada Kota Surabaya" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                    <input type="text" name="company_name" required value="{{ old('company_name', $assessment->company_name) }}" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">2. Alamat Perusahaan</label>
-                    <input type="text" name="address" placeholder="Contoh: Jl. Mayjend Prof. Dr. Moestopo No. 2 Surabaya" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                    <input type="text" name="address" value="{{ old('address', $assessment->company_address) }}" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">3. Jenis Perusahaan</label>
-                    <input type="text" name="company_type" placeholder="Contoh: Pengolahan Air Bersih (PDAM)" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                    <input type="text" name="company_type" value="{{ old('company_type', $assessment->company_sector) }}" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">4. Tanggal Sampling</label>
-                    <input type="date" name="assessment_date" value="{{ date('Y-m-d') }}" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                    <input type="date" name="assessment_date" value="{{ old('assessment_date', $assessment->assessment_date) }}" class="md:col-span-2 border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <label class="font-semibold text-slate-700">5. Durasi Shift Kerja Harian</label>
                     <div class="md:col-span-2 flex items-center gap-2">
-                        <input type="number" id="shift_hours" name="shift_hours" value="8" min="1" max="24" step="0.5" 
+                        <input type="number" id="shift_hours" name="shift_hours" value="{{ old('shift_hours', $assessment->shift_hours) }}" min="1" max="24" step="0.5" 
                                class="w-24 border border-slate-300 rounded-lg p-2 text-xs font-bold text-[#153e67] outline-none text-center">
                         <span class="text-xs text-slate-500">Jam/hari (Otomatis menambah +0.5 per jam jika &gt; 8 jam)</span>
                     </div>
@@ -186,7 +188,7 @@
             </div>
         </div>
 
-        <!-- ================= BAGIAN 2: PROFIL PEKERJA & URAIAN TUGAS ================= -->
+        <!-- BAGIAN 2: PROFIL PEKERJA & URAIAN TUGAS -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 bg-[#fbfcfd] flex items-center gap-2.5">
                 <span class="w-6 h-6 rounded bg-[#153e67] text-white flex items-center justify-center text-xs font-bold">2</span>
@@ -197,11 +199,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-semibold text-slate-700 block mb-1.5">Nama Tenaga Kerja <span class="text-rose-500">*</span></label>
-                        <input type="text" name="worker_name" required placeholder="Contoh: M. Jazuli" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                        <input type="text" name="worker_name" required value="{{ old('worker_name', $assessment->worker_name) }}" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                     </div>
                     <div>
                         <label class="font-semibold text-slate-700 block mb-1.5">Posisi / Jabatan <span class="text-rose-500">*</span></label>
-                        <input type="text" name="position" required placeholder="Contoh: Analis Fisika Kimia" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
+                        <input type="text" name="position" required value="{{ old('position', $assessment->position) }}" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:border-[#153e67] outline-none">
                     </div>
                 </div>
 
@@ -210,11 +212,11 @@
                     <div class="space-y-2">
                         <div>
                             <span class="text-slate-600 block mb-1">a. Deskripsi Tugas:</span>
-                            <textarea name="job_tasks" rows="2" placeholder="Uraikan tugas operasional yang dilaksanakan..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs bg-white outline-none focus:border-[#153e67]"></textarea>
+                            <textarea name="job_tasks" rows="2" class="w-full border border-slate-300 rounded-lg p-2.5 text-xs bg-white outline-none focus:border-[#153e67]">{{ old('job_tasks', $assessment->job_tasks) }}</textarea>
                         </div>
                         <div>
                             <span class="text-slate-600 block mb-1">b. Alokasi Waktu:</span>
-                            <input type="text" name="job_duration" placeholder="Contoh: Dalam 1 hari kerja melakukan analisa dengan durasi 2-3 jam" class="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white outline-none focus:border-[#153e67]">
+                            <input type="text" name="job_duration" value="{{ old('job_duration', $assessment->job_duration) }}" class="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white outline-none focus:border-[#153e67]">
                         </div>
                     </div>
                 </div>
@@ -224,7 +226,7 @@
                     <div class="grid grid-cols-3 gap-3">
                         @foreach(['Kanan', 'Kiri', 'Keduanya'] as $hand)
                             <div class="radio-custom">
-                                <input type="radio" name="dominant_hand" value="{{ $hand }}" id="dh_{{ $hand }}" class="hidden" {{ $hand === 'Kanan' ? 'checked' : '' }}>
+                                <input type="radio" name="dominant_hand" value="{{ $hand }}" id="dh_{{ $hand }}" class="hidden" {{ old('dominant_hand', $assessment->dominant_hand) === $hand ? 'checked' : '' }}>
                                 <label for="dh_{{ $hand }}" class="flex items-center justify-center p-2 rounded-lg border border-slate-300 cursor-pointer text-center transition">
                                     {{ $hand }}
                                 </label>
@@ -238,7 +240,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
                         @foreach(['Kurang dari 3 bulan', '3 bulan - 1 tahun', '1 - 5 tahun', '5 - 10 tahun', 'Lebih dari 10 tahun'] as $val)
                             <div class="radio-custom">
-                                <input type="radio" name="work_duration_level" value="{{ $val }}" id="dur_{{ Str::slug($val) }}" class="hidden" {{ $val === '1 - 5 tahun' ? 'checked' : '' }}>
+                                <input type="radio" name="work_duration_level" value="{{ $val }}" id="dur_{{ Str::slug($val) }}" class="hidden" {{ old('work_duration_level', $assessment->work_duration_level) === $val ? 'checked' : '' }}>
                                 <label for="dur_{{ Str::slug($val) }}" class="flex items-center justify-center p-2 rounded-lg border border-slate-300 cursor-pointer text-center transition">
                                     {{ $val }}
                                 </label>
@@ -253,7 +255,7 @@
                         <div class="grid grid-cols-2 gap-2">
                             @foreach(['Tidak pernah', 'Kadang-kadang', 'Sering', 'Selalu'] as $idx => $opt)
                                 <div class="radio-custom">
-                                    <input type="radio" name="mental_fatigue" value="{{ $opt }}" id="m_{{ $idx }}" class="hidden" {{ $idx === 0 ? 'checked' : '' }}>
+                                    <input type="radio" name="mental_fatigue" value="{{ $opt }}" id="m_{{ $idx }}" class="hidden" {{ old('mental_fatigue', $assessment->mental_fatigue) === $opt ? 'checked' : '' }}>
                                     <label for="m_{{ $idx }}" class="flex items-center justify-center p-2 rounded-lg border border-slate-300 cursor-pointer transition text-center">
                                         {{ $opt }}
                                     </label>
@@ -266,7 +268,7 @@
                         <div class="grid grid-cols-2 gap-2">
                             @foreach(['Tidak pernah', 'Kadang-kadang', 'Sering', 'Selalu'] as $idx => $opt)
                                 <div class="radio-custom">
-                                    <input type="radio" name="physical_fatigue" value="{{ $opt }}" id="f_{{ $idx }}" class="hidden" {{ $idx === 1 ? 'checked' : '' }}>
+                                    <input type="radio" name="physical_fatigue" value="{{ $opt }}" id="f_{{ $idx }}" class="hidden" {{ old('physical_fatigue', $assessment->physical_fatigue) === $opt ? 'checked' : '' }}>
                                     <label for="f_{{ $idx }}" class="flex items-center justify-center p-2 rounded-lg border border-slate-300 cursor-pointer transition text-center">
                                         {{ $opt }}
                                     </label>
@@ -282,18 +284,18 @@
                     </span>
                     <div class="flex gap-4 pt-1">
                         <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-white rounded-lg border border-slate-300 cursor-pointer transition has-[:checked]:border-[#153e67] has-[:checked]:bg-[#153e67] has-[:checked]:text-white font-bold">
-                            <input type="radio" name="has_pain_last_year" value="1" onchange="toggleGotrak(true)" class="hidden"> Ya
+                            <input type="radio" name="has_pain_last_year" value="1" {{ old('has_pain_last_year', $assessment->has_pain_last_year) == 1 ? 'checked' : '' }} onchange="toggleGotrak(true)" class="hidden"> Ya
                         </label>
                         <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-white rounded-lg border border-slate-300 cursor-pointer transition has-[:checked]:border-slate-800 has-[:checked]:bg-slate-800 has-[:checked]:text-white font-bold">
-                            <input type="radio" name="has_pain_last_year" value="0" checked onchange="toggleGotrak(false)" class="hidden"> Tidak
+                            <input type="radio" name="has_pain_last_year" value="0" {{ old('has_pain_last_year', $assessment->has_pain_last_year) == 0 ? 'checked' : '' }} onchange="toggleGotrak(false)" class="hidden"> Tidak
                         </label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= BAGIAN 3: NORDIC BODY MAP (GOTRAK) ================= -->
-        <div id="gotrak_section" class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden transition-all duration-300 opacity-40 pointer-events-none">
+        <!-- BAGIAN 3: NORDIC BODY MAP (GOTRAK) -->
+        <div id="gotrak_section" class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden transition-all duration-300 {{ $assessment->has_pain_last_year ? '' : 'opacity-40 pointer-events-none' }}">
             <div class="px-6 py-4 border-b border-slate-200 bg-[#fbfcfd] flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <span class="w-6 h-6 rounded bg-[#153e67] text-white flex items-center justify-center text-xs font-bold">3</span>
@@ -438,7 +440,7 @@
                 <!-- TABEL RIWAYAT CEDERA -->
                 <div class="space-y-2 pt-3 border-t border-slate-200">
                     <p class="text-xs text-black font-semibold">
-                        Pada setiap bagian tubuh dengan keterangan "sakit" atau "sakit parah", atau "selalu" merasakan "tidak nyaman", jelaskan pekerjaan yang menurut Anda menyebabkan masalah tersebut, dan apakah sebelumnya Anda pernah mengalami cedera di bagian tubuh tersebut:
+                        Pada setiap bagian tubuh dengan keterangan "sakit" atau "sakit parah", atau "selalu" merasakan "tidak nyaman", jelaskan pekerjaan yang menurut Anda menyebabkan masalah tersebut:
                     </p>
                     <div class="border-2 border-black rounded overflow-hidden">
                         <table class="w-full text-left border-collapse text-xs">
@@ -470,11 +472,10 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- ================= BAGIAN 4: DAFTAR PERIKSA 31 BUTIR SNI 9011:2021 ================= -->
+        <!-- BAGIAN 4: DAFTAR PERIKSA 31 BUTIR SNI 9011:2021 -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 bg-[#fbfcfd] flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
@@ -612,7 +613,7 @@
             </div>
         </div>
 
-        <!-- ================= BAGIAN 5: MULTI-UPLOAD, WEBCAM & INTERACTIVE CANVAS ================= -->
+        <!-- BAGIAN 5: MULTI-UPLOAD, WEBCAM & INTERACTIVE CANVAS -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 bg-[#fbfcfd] flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
@@ -627,7 +628,7 @@
                     <div class="relative border-2 border-dashed border-slate-300 rounded-xl p-5 text-center bg-slate-50 hover:bg-slate-100 transition flex flex-col justify-center items-center">
                         <input type="file" id="multiImageUploader" name="ergo_photos[]" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleMultipleImages(event)">
                         <i class="ph-bold ph-upload-simple text-2xl text-[#153e67] mb-1"></i>
-                        <p class="font-bold text-slate-800 text-xs">Unggah Berkas Foto (Bisa Banyak)</p>
+                        <p class="font-bold text-slate-800 text-xs">Unggah Tambahan Berkas Foto (Bisa Banyak)</p>
                         <p class="text-slate-500 text-[10px]">Pilih file dari perangkat Anda</p>
                     </div>
 
@@ -642,7 +643,7 @@
                 <input type="hidden" name="annotated_photos_json" id="annotatedPhotosJson">
 
                 <!-- Daftar Thumbnail Foto -->
-                <div id="thumbnailContainer" class="hidden space-y-2">
+                <div id="thumbnailContainer" class="space-y-2">
                     <span class="font-bold text-slate-700 block">Daftar Foto Dokumentasi (Klik untuk edit sudut / hapus):</span>
                     <div id="thumbnailList" class="flex flex-wrap gap-3"></div>
                 </div>
@@ -670,18 +671,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Pengambil Contoh Uji (Surveyor K3)</label>
-                        <input type="text" name="sampler_name" placeholder="Nama lengkap petugas penguji..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs outline-none focus:border-[#153e67]">
+                        <input type="text" name="sampler_name" value="{{ old('sampler_name') }}" placeholder="Nama lengkap petugas penguji..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs outline-none focus:border-[#153e67]">
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Metode Pengendalian yang Sudah Ada</label>
-                        <input type="text" name="existing_control" value="Adanya waktu istirahat/peregangan" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none focus:border-[#153e67]">
+                        <input type="text" name="existing_control" value="{{ old('existing_control', $assessment->existing_control) }}" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none focus:border-[#153e67]">
                     </div>
                 </div>
 
                 <div class="pt-4 flex justify-end gap-2 border-t border-slate-200">
                     <a href="{{ route('ergo.index') }}" class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 font-semibold">Batal</a>
                     <button type="submit" id="btnBottomSubmit" class="px-5 py-2 bg-[#153e67] hover:bg-[#0f2e4d] text-white rounded-lg font-bold shadow-sm transition flex items-center gap-1.5">
-                        <i class="ph-bold ph-floppy-disk"></i> Simpan Data Pengujian
+                        <i class="ph-bold ph-check"></i> Simpan Perubahan Pengujian
                     </button>
                 </div>
             </div>
@@ -709,7 +710,7 @@
     </div>
 </div>
 
-<!-- ================= JAVASCRIPT LENGKAP ================= -->
+<!-- ================= JAVASCRIPT ================= -->
 <script>
     function toggleGotrak(show) {
         const sec = document.getElementById('gotrak_section');
@@ -823,6 +824,7 @@
     window.addEventListener('load', () => {
         setTimeout(drawDynamicPointers, 200);
         calculateErgoAssessment();
+        loadExistingPhotos();
     });
 
     window.addEventListener('resize', () => {
@@ -852,6 +854,42 @@
     const pose = new Pose({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}` });
     pose.setOptions({ modelComplexity: 1, smoothLandmarks: true, minDetectionConfidence: 0.5 });
     pose.onResults(handleSinglePoseResult);
+
+    // Muat foto-foto yang sudah tersimpan sebelumnya ke kanvas interaktif
+    function loadExistingPhotos() {
+        @if(isset($photos) && count($photos) > 0)
+            const existingPhotosData = @json($photos);
+            existingPhotosData.forEach(p => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.src = "{{ asset('storage') }}/" + p.file_path;
+                img.onload = function() {
+                    fetch(img.src)
+                        .then(res => res.blob())
+                        .then(blob => {
+                            const file = new File([blob], p.photo_name, { type: blob.type || 'image/jpeg' });
+                            let landmarks = null;
+                            try {
+                                landmarks = p.landmarks_json ? JSON.parse(p.landmarks_json) : null;
+                            } catch(e) {}
+
+                            uploadedPhotos.push({
+                                file: file,
+                                name: p.photo_name,
+                                imageObj: img,
+                                landmarks: landmarks,
+                                replaceIndex: null
+                            });
+
+                            if (activePhotoIndex === null) {
+                                setActivePhoto(0);
+                            }
+                            renderThumbnails();
+                        });
+                };
+            });
+        @endif
+    }
 
     function handleMultipleImages(event) {
         const files = Array.from(event.target.files);
@@ -955,12 +993,12 @@
     function setActivePhoto(idx) {
         if (uploadedPhotos.length === 0) {
             activePhotoIndex = null;
-            document.getElementById('thumbnailContainer').classList.add('hidden');
             document.getElementById('activeCanvasWrapper').classList.add('hidden');
             return;
         }
         activePhotoIndex = idx;
         renderThumbnails();
+        document.getElementById('activeCanvasWrapper').classList.remove('hidden');
         document.getElementById('activePhotoTitle').innerText = `Sedang Mengedit Foto: ${uploadedPhotos[idx].name}`;
         redrawActiveCanvas();
     }
@@ -1132,7 +1170,7 @@
         if (activePhotoIndex !== null) redrawActiveCanvas();
     });
 
-    // ================= RENDERING GAMBAR TERANOTASI DAN SUBMIT FORM =================
+    // Render Gambar ke Blob sebelum submit
     function renderAnnotatedBlob(photo) {
         return new Promise((resolve) => {
             const exportCanvas = document.createElement('canvas');
@@ -1213,7 +1251,7 @@
             }
             if (bottomBtn) {
                 bottomBtn.disabled = true;
-                bottomBtn.innerHTML = `<i class="ph-bold ph-spinner animate-spin"></i> Menyimpan Garis Sudut...`;
+                bottomBtn.innerHTML = `<i class="ph-bold ph-spinner animate-spin"></i> Menyimpan Perubahan...`;
             }
 
             const inputEl = document.getElementById('multiImageUploader');
