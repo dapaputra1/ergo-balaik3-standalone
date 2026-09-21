@@ -22,18 +22,23 @@
 
     <!-- Top Action Bar -->
     <div class="flex items-center justify-between no-print">
-        <a href="{{ route('ergo.index') }}" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-[#153e67] bg-white border border-slate-200 px-3.5 py-2 rounded-lg shadow-xs transition">
+        <a href="{{ route('ergo.index') }}" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-[#153e67] bg-white border border-slate-200 px-3.5 py-2 rounded-lg shadow-sm transition">
             <i class="ph-bold ph-arrow-left"></i> Kembali ke Daftar
         </a>
         <div class="flex items-center gap-2">
-            <button onclick="window.print()" class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#153e67] hover:bg-[#0f2e4d] px-4 py-2 rounded-lg shadow-xs transition">
-                <i class="ph-bold ph-printer"></i> Cetak Dokumen LHU
-            </button>
+            <!-- Tombol Edit LHU Resmi -->
+            <a href="{{ route('ergo.lhu.edit', $assessment->id) }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 px-3.5 py-2 rounded-lg shadow-sm transition">
+                <i class="ph-bold ph-pencil-simple text-base"></i> Edit Draf LHU
+            </a>
+            <!-- Tombol Unduh PDF Resmi -->
+            <a href="{{ route('ergo.pdf', $assessment->id) }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 px-4 py-2 rounded-lg shadow-sm transition">
+                <i class="ph-bold ph-file-pdf text-base"></i> Unduh LHU (PDF)
+            </a>
         </div>
     </div>
 
     <!-- Container Dokumen LHU -->
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         
         <!-- Header Dokumen -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-6">
@@ -75,7 +80,7 @@
                     <p><strong class="text-slate-800">Nama:</strong> {{ $assessment->company_name }}</p>
                     <p><strong class="text-slate-800">Alamat:</strong> {{ $assessment->company_address ?? '-' }}</p>
                     <p><strong class="text-slate-800">Sektor:</strong> {{ $assessment->company_sector ?? '-' }}</p>
-                    <p><strong class="text-slate-800">Tanggal Sampling:</strong> {{ date('d F Y', strtotime($assessment->assessment_date)) }}</p>
+                    <p><strong class="text-slate-800">Tanggal Sampling:</strong> {{ \Carbon\Carbon::parse($assessment->assessment_date)->isoFormat('D MMMM Y') }}</p>
                 </div>
             </div>
 
@@ -86,7 +91,7 @@
                 <div class="text-xs space-y-1.5 text-slate-600">
                     <p><strong class="text-slate-800">Nama Pekerja:</strong> {{ $assessment->worker_name }}</p>
                     <p><strong class="text-slate-800">Posisi:</strong> {{ $assessment->position }}</p>
-                    <p><strong class="text-slate-800">Durasi Shift:</strong> {{ $assessment->shift_hours }} Jam / Hari</p>
+                    <p><strong class="text-slate-800">Durasi Shift:</strong> {{ $assessment->shift_hours }} jam / hari</p>
                     <p><strong class="text-slate-800">Tangan Dominan:</strong> {{ $assessment->dominant_hand }}</p>
                 </div>
             </div>
@@ -130,12 +135,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     @foreach($photos as $photo)
                         @php
-                            // Normalisasi URL gambar
                             $imageUrl = filter_var($photo->file_path, FILTER_VALIDATE_URL) 
                                 ? $photo->file_path 
                                 : asset('storage/' . ltrim($photo->file_path, '/'));
                         @endphp
-                        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-xs flex flex-col">
+                        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-sm flex flex-col">
                             <div class="aspect-4/3 w-full bg-slate-900 flex items-center justify-center overflow-hidden relative">
                                 <img src="{{ $imageUrl }}" 
                                      alt="{{ $photo->photo_name }}" 
@@ -147,7 +151,7 @@
                                 <span class="font-semibold text-slate-700 truncate max-w-[200px]" title="{{ $photo->photo_name }}">
                                     {{ $photo->photo_name }}
                                 </span>
-                                @if($photo->landmarks_json)
+                                @if(!empty($photo->landmarks_json))
                                     <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold flex items-center gap-1">
                                         <i class="ph-bold ph-check"></i> Sudut Teranalisis
                                     </span>
@@ -165,7 +169,7 @@
         </div>
 
         <!-- Rekomendasi & Pengendalian -->
-        @if($assessment->existing_control || $assessment->notes)
+        @if($assessment->existing_control || (!empty($assessment->notes)))
             <div class="space-y-2 pt-4 border-t border-slate-100">
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
                     <i class="ph-bold ph-shield-check text-[#153e67]"></i> Rekomendasi & Tindakan Pengendalian
@@ -179,5 +183,6 @@
     </div>
 
 </div>
+
 </body>
 </html>

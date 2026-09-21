@@ -17,5 +17,7 @@ Route::prefix('ergo')->name('ergo.')->controller(ErgoAssessmentController::class
     Route::delete('/destroy/{id}', 'destroy')->name('destroy');
 
     // Cetak PDF LHU Resmi
-    Route::get('/pdf/{id}', 'exportPdf')->name('pdf');
+    Route::get('/pdf/{id}', [ErgoAssessmentController::class, 'exportPdf'])->name('pdf');
+    Route::get('/lhu/editor/{id}', [ErgoAssessmentController::class, 'editLhu'])->name('lhu.edit');
+    Route::put('/lhu/update/{id}', [ErgoAssessmentController::class, 'updateLhu'])->name('lhu.update');
 });
